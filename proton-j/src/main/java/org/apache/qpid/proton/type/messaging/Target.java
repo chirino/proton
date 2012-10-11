@@ -30,10 +30,7 @@ import org.apache.qpid.proton.type.Symbol;
 import org.apache.qpid.proton.type.UnsignedInteger;
 import org.apache.qpid.proton.type.UnsignedLong;
 
-import java.util.AbstractList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class Target
@@ -54,6 +51,31 @@ public class Target
     private boolean _dynamic;
     private Map _dynamicNodeProperties;
     private Symbol[] _capabilities;
+
+    public Target()
+    {
+    }
+
+    private Target(Target other)
+    {
+        _address = other._address;
+        _durable = other._durable;
+        _expiryPolicy = other._expiryPolicy;
+        _timeout = other._timeout;
+        _dynamic = other._dynamic;
+        if( other._dynamicNodeProperties !=null ) {
+            _dynamicNodeProperties = new HashMap();
+            // TODO: Deep copy??
+            _dynamicNodeProperties.putAll(other._dynamicNodeProperties);
+        }
+        _capabilities = Symbol.copy(other._capabilities);
+    }
+
+    @Override
+    public org.apache.qpid.proton.type.transport.Target copy()
+    {
+        return new Target(this);
+    }
 
     public String getAddress()
     {
@@ -115,6 +137,7 @@ public class Target
         _dynamicNodeProperties = dynamicNodeProperties;
     }
 
+    @Override
     public Symbol[] getCapabilities()
     {
         return _capabilities;
@@ -125,6 +148,7 @@ public class Target
         _capabilities = capabilities;
     }
     
+    @Override
     public Object getDescriptor()
     {
         return DESCRIPTOR;

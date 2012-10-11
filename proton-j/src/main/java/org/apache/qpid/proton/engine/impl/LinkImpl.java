@@ -23,6 +23,8 @@ package org.apache.qpid.proton.engine.impl;
 import java.util.EnumSet;
 import org.apache.qpid.proton.engine.EndpointState;
 import org.apache.qpid.proton.engine.Link;
+import org.apache.qpid.proton.type.transport.Source;
+import org.apache.qpid.proton.type.transport.Target;
 
 public abstract class LinkImpl extends EndpointImpl implements Link
 {
@@ -33,10 +35,10 @@ public abstract class LinkImpl extends EndpointImpl implements Link
     DeliveryImpl _tail;
     DeliveryImpl _current;
     private String _name;
-    private String _localSourceAddress;
-    private String _remoteSourceAddress;
-    private String _localTargetAddress;
-    private String _remoteTargetAddress;
+    private Target _remoteTarget;
+    private Target _localTarget;
+    private Source _remoteSource;
+    private Source _localSource;
     private int _queued;
     private int _credit;
     private int _unsettled;
@@ -158,50 +160,6 @@ public abstract class LinkImpl extends EndpointImpl implements Link
         return _session;
     }
 
-    public String getRemoteSourceAddress()
-    {
-        return _remoteSourceAddress;
-    }
-
-    void setRemoteSourceAddress(String sourceAddress)
-    {
-        _remoteSourceAddress = sourceAddress;
-    }
-
-    public String getRemoteTargetAddress()
-    {
-        return _remoteTargetAddress;
-    }
-
-    void setRemoteTargetAddress(String targetAddress)
-    {
-        _remoteTargetAddress = targetAddress;
-    }
-
-    public String getLocalSourceAddress()
-    {
-        return _localSourceAddress;
-    }
-
-    public void setLocalSourceAddress(String localSourceAddress)
-    {
-        // TODO - should be an error if local state is ACTIVE
-        _localSourceAddress = localSourceAddress;
-        modified();
-    }
-
-    public String getLocalTargetAddress()
-    {
-        return _localTargetAddress;
-    }
-
-    public void setLocalTargetAddress(String localTargetAddress)
-    {
-        // TODO - should be an error if local state is ACTIVE
-        _localTargetAddress = localTargetAddress;
-        modified();
-    }
-
     public Link next(EnumSet<EndpointState> local, EnumSet<EndpointState> remote)
     {
         LinkNode.Query<LinkImpl> query = new EndpointImplQuery<LinkImpl>(local, remote);
@@ -284,6 +242,56 @@ public abstract class LinkImpl extends EndpointImpl implements Link
     boolean getDrain()
     {
         return _drain;
+    }
+
+    public Target getRemoteTarget() {
+        return copy(_remoteTarget);
+    }
+
+    public void setRemoteTarget(Target _remoteTarget) {
+        this._remoteTarget = copy(_remoteTarget);
+    }
+
+    public Source getRemoteSource() {
+        return copy(_remoteSource);
+    }
+
+    public void setRemoteSource(Source _remoteSource) {
+        this._remoteSource = copy(_remoteSource);
+    }
+
+    public Target getLocalTarget() {
+        return copy(_localTarget);
+    }
+
+    public void setLocalTarget(Target _localTarget) {
+        this._localTarget = copy(_localTarget);
+        modified();
+    }
+
+    public Source getLocalSource() {
+        return copy(_localSource);
+    }
+
+    public void setLocalSource(Source _localSource) {
+        this._localSource = copy(_localSource);
+        modified();
+    }
+
+    private Target copy(Target other) {
+        if( other == null ) {
+            return null;
+        } else {
+            return other.copy();
+        }
+    }
+
+    private Source copy(Source other) {
+        if( other == null ) {
+            return null;
+        } else {
+            return other.copy();
+        }
     }
 
 }

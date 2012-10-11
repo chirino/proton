@@ -53,8 +53,8 @@ public class NoddyBrokerApplication implements Application
         while(link != null)
         {
             // TODO - following is a hack
-            link.setLocalSourceAddress(link.getRemoteSourceAddress());
-            link.setLocalTargetAddress(link.getRemoteTargetAddress());
+            link.setLocalSource(link.getRemoteSource());
+            link.setLocalTarget(link.getRemoteTarget());
 
             link.open();
             if(link instanceof Receiver)

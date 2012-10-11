@@ -620,19 +620,8 @@ public class TransportImpl extends EndpointImpl implements Transport, FrameBody.
                             attach.setHandle(localHandle);
                             attach.setName(transportLink.getName());
 
-                            if(link.getLocalSourceAddress() != null)
-                            {
-                                Source source = new Source();
-                                source.setAddress(link.getLocalSourceAddress());
-                                attach.setSource(source);
-                            }
-
-                            if(link.getLocalTargetAddress() != null)
-                            {
-                                Target target = new Target();
-                                target.setAddress(link.getLocalTargetAddress());
-                                attach.setTarget(target);
-                            }
+                            attach.setSource(link.getLocalSource());
+                            attach.setTarget(link.getLocalTarget());
 
                             attach.setRole(endpoint instanceof ReceiverImpl ? Role.RECEIVER : Role.SENDER);
 
@@ -1003,17 +992,8 @@ public class TransportImpl extends EndpointImpl implements Transport, FrameBody.
                 }
 
                 link.setRemoteState(EndpointState.ACTIVE);
-                Source source = (Source) attach.getSource();
-                if(source != null)
-                {
-                    link.setRemoteSourceAddress(source.getAddress());
-                }
-                Target target = (Target) attach.getTarget();
-                if(target != null)
-                {
-                    link.setRemoteTargetAddress(target.getAddress());
-                }
-
+                link.setRemoteSource((Source) attach.getSource());
+                link.setRemoteTarget(attach.getTarget());
                 transportLink.setName(attach.getName());
                 transportLink.setRemoteHandle(attach.getHandle());
                 transportSession.addLinkRemoteHandle(transportLink, attach.getHandle());

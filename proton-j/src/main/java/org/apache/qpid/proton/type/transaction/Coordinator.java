@@ -29,6 +29,7 @@ import java.util.AbstractList;
 import org.apache.qpid.proton.codec.Decoder;
 import org.apache.qpid.proton.codec.DescribedTypeConstructor;
 import org.apache.qpid.proton.type.*;
+import org.apache.qpid.proton.type.transport.Target;
 
 
 public class Coordinator
@@ -43,6 +44,20 @@ public class Coordinator
     private final CoordinatorWrapper _wrapper = new CoordinatorWrapper();
     
     private Symbol[] _capabilities;
+
+    public Coordinator()
+    {
+    }
+
+    public Coordinator(Coordinator other)
+    {
+        this._capabilities = Symbol.copy(other._capabilities);
+    }
+
+    @Override
+    public Target copy() {
+        return new Coordinator(this);
+    }
 
     public Symbol[] getCapabilities()
     {

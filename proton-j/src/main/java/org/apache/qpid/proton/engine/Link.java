@@ -20,6 +20,9 @@
  */
 package org.apache.qpid.proton.engine;
 
+import org.apache.qpid.proton.type.transport.Source;
+import org.apache.qpid.proton.type.transport.Target;
+
 import java.util.EnumSet;
 
 /**
@@ -54,13 +57,13 @@ public interface Link extends Endpoint
      */
     boolean advance();
 
-    String getLocalSourceAddress();
-    String getLocalTargetAddress();
-    void setLocalSourceAddress(String address);
-    void setLocalTargetAddress(String address);
+    Source getLocalSource();
+    Target getLocalTarget();
+    void setLocalSource(Source address);
+    void setLocalTarget(Target address);
 
-    String getRemoteSourceAddress();
-    String getRemoteTargetAddress();
+    Source getRemoteSource();
+    Target getRemoteTarget();
 
 
     public Link next(EnumSet<EndpointState> local, EnumSet<EndpointState> remote);

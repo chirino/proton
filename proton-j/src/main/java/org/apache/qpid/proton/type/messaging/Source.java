@@ -30,10 +30,7 @@ import org.apache.qpid.proton.type.Symbol;
 import org.apache.qpid.proton.type.UnsignedInteger;
 import org.apache.qpid.proton.type.UnsignedLong;
 
-import java.util.AbstractList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class Source
@@ -58,6 +55,40 @@ public class Source
     private Outcome _defaultOutcome;
     private Symbol[] _outcomes;
     private Symbol[] _capabilities;
+
+    public Source()
+    {
+    }
+
+    private Source(Source other)
+    {
+        _address = other._address;
+        _durable = other._durable;
+        _expiryPolicy = other._expiryPolicy;
+        _timeout = other._timeout;
+        _dynamic = other._dynamic;
+        if( other._dynamicNodeProperties !=null ) {
+            _dynamicNodeProperties = new HashMap();
+            // TODO: Deep copy??
+            _dynamicNodeProperties.putAll(other._dynamicNodeProperties);
+        }
+        _distributionMode = other._distributionMode;
+        if( other._filter !=null ) {
+            _filter = new HashMap();
+            // TODO: Deep copy??
+            _filter.putAll(other._filter);
+        }
+        _defaultOutcome = other._defaultOutcome;
+        _outcomes = Symbol.copy( other._outcomes );
+        _capabilities = Symbol.copy( other._capabilities );
+
+    }
+
+    @Override
+    public org.apache.qpid.proton.type.transport.Source copy()
+    {
+        return new Source(this);
+    }
 
     public String getAddress()
     {

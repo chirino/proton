@@ -86,5 +86,13 @@ public final class Symbol implements Comparable<Symbol>, CharSequence
         return symbol;
     }
 
+    public static Symbol[] copy(Symbol[] value) {
+        if ( value == null ) {
+            return null;
+        }
+        Symbol rc[] = new Symbol[value.length];
+        System.arraycopy(value, 0, rc, 0, value.length);
+        return rc;
+    }
 
 }
